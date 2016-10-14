@@ -13,9 +13,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var moviesTableView: UITableView!
     
-    
-    var movies = [NSDictionary]()
     var refreshControl = UIRefreshControl()
+    var movies = [NSDictionary]()
     var isLoading = false
     var page = 1
     var totalPages = 1
@@ -26,6 +25,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Do any additional setup after loading the view.
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
+        refreshControl.addTarget(self, action: #selector(HomeViewController.refreshData), for: UIControlEvents.valueChanged)
+        moviesTableView.insertSubview(refreshControl, at: 0)
         fetchData(page: page)
     }
 
@@ -36,7 +37,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func fetchData(page: Int) {
-        let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: moviesTableView.contentSize.width, height: 50))
+        let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: moviesTableView.contentSize.width, height: 60))
         let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         loadingView.startAnimating()
         loadingView.center = tableFooterView.center
@@ -77,6 +78,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             })
             task.resume()
         }
+    }
+    
+    func refreshData() {
+        movies.removeAll()
+        page = 1
+        fetchData(page: 1)
     }
     
     
