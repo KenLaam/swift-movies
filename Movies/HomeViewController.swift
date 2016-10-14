@@ -36,6 +36,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func fetchData(page: Int) {
+        let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: moviesTableView.contentSize.width, height: 50))
+        let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        loadingView.startAnimating()
+        loadingView.center = tableFooterView.center
+        tableFooterView.addSubview(loadingView)
+        moviesTableView.tableFooterView = tableFooterView
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)&page=\(page)")
         if let url = url {
