@@ -8,7 +8,7 @@ Time spent: **X** hours spent in total
 
 The following **required** functionality is completed:
 
-- [ ] User can view a list of movies currently playing in theaters. Poster images load asynchronously.
+- [x] User can view a list of movies currently playing in theaters. Poster images load asynchronously.
 - [ ] User can view movie details by tapping on a cell.
 - [ ] User sees loading state while waiting for the API.
 - [ ] User sees an error message when there is a network error.

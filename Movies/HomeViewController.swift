@@ -92,17 +92,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         return movies.count
     }
     
-    
-    // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
-    // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
-    
-    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = moviesTableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! MovieViewCell
         let movie = movies[indexPath.row]
         let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
         cell.titleLabel.text = (movie.value(forKey: "title") as! String)
         cell.posterImageView.setImageWith(URL(string: poster)!)
+        cell.accessoryType = UITableViewCellAccessoryType.none
         return cell
     }
     
@@ -121,17 +117,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let nextVC = segue.destination as! MovieDetailViewController
+        let index = moviesTableView.indexPathForSelectedRow?.row
+        nextVC.movie = movies[index!]
     }
-    */
-
 }
