@@ -57,12 +57,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             let task = session.dataTask(
                 with: request,
                 completionHandler: { (dataOrNil, response, error) in
+                    self.refreshControl.endRefreshing()
+                    loadingView.stopAnimating()
                     if let data = dataOrNil {
                         if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                             print("response: \(responseDictionary)")
                             self.isLoading = false
                             if let moviesData = responseDictionary["results"] as? [NSDictionary] {
-                                if self.movies.count == 0 {
+                                if page == 1 {
                                     self.movies = moviesData
                                     self.totalPages = responseDictionary.value(forKey: "total_pages") as! Int
                                 } else {
@@ -71,7 +73,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                                     }
                                 }
                                 self.moviesTableView.reloadData()
-                                self.refreshControl.endRefreshing()
                             }
                         }
                     }
@@ -81,7 +82,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func refreshData() {
-        movies.removeAll()
         page = 1
         fetchData(page: 1)
     }
