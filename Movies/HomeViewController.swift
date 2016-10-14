@@ -59,6 +59,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 completionHandler: { (dataOrNil, response, error) in
                     self.refreshControl.endRefreshing()
                     loadingView.stopAnimating()
+                    
+                    if error != nil {
+                        print("KenK11 \(error?.localizedDescription)")
+                        self.showError(error: (error?.localizedDescription)!)
+                    }
+                    
                     if let data = dataOrNil {
                         if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                             print("response: \(responseDictionary)")
@@ -86,7 +92,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         fetchData(page: 1)
     }
     
-    
+    func showError(error: String) {
+        let alert = UIAlertController(title: "Error networking", message: error, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dimiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
