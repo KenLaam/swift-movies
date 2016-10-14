@@ -9,13 +9,16 @@
 import UIKit
 import AFNetworking
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     @IBOutlet weak var moviesTableView: UITableView!
     
     
     var movies = [NSDictionary]()
     var refreshControl = UIRefreshControl()
+    var isLoading = false
+    var page = 1
+    var totalPages = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +26,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Do any additional setup after loading the view.
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
-        fetchData()
+        fetchData(page: page)
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,9 +35,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    func fetchData() {
+    func fetchData(page: Int) {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)&page=\(page)")
         if let url = url {
             let request = URLRequest(
                 url: url,
@@ -50,8 +53,16 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     if let data = dataOrNil {
                         if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                             print("response: \(responseDictionary)")
+                            self.isLoading = false
                             if let moviesData = responseDictionary["results"] as? [NSDictionary] {
-                                self.movies = moviesData
+                                if self.movies.count == 0 {
+                                    self.movies = moviesData
+                                    self.totalPages = responseDictionary.value(forKey: "total_pages") as! Int
+                                } else {
+                                    for movie in moviesData {
+                                        self.movies.append(movie)
+                                    }
+                                }
                                 self.moviesTableView.reloadData()
                                 self.refreshControl.endRefreshing()
                             }
@@ -76,10 +87,25 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = moviesTableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! MovieViewCell
         let movie = movies[indexPath.row]
-        let poster = "https://image.tmdb.org/t/p/w342/\(movie.value(forKey: "poster_path") as! String)"
+        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
         cell.titleLabel.text = (movie.value(forKey: "title") as! String)
         cell.posterImageView.setImageWith(URL(string: poster)!)
         return cell
+    }
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if(!isLoading) {
+            let scrollViewContentHeight = moviesTableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - moviesTableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && moviesTableView.isDragging && page < totalPages) {
+                isLoading = true
+                page += 1
+                fetchData(page: page)
+            }
+        }
+        
     }
     
     
