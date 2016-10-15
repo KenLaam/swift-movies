@@ -13,6 +13,7 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var moviesTableView: UITableView!
     
+    var endPoint: String!
     var refreshControl = UIRefreshControl()
     var movies = [NSDictionary]()
     var isLoading = false
@@ -44,7 +45,7 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableFooterView.addSubview(loadingView)
         moviesTableView.tableFooterView = tableFooterView
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)&page=\(page)")
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endPoint!)?api_key=\(apiKey)&page=\(page)")
         if let url = url {
             let request = URLRequest(
                 url: url,
