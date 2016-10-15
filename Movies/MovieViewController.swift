@@ -122,10 +122,22 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = moviesTableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! MovieViewCell
         let movie = movies[indexPath.row]
-        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
         cell.titleLabel.text = (movie.value(forKey: "title") as! String)
         cell.overviewLabel.text = (movie.value(forKey: "overview") as! String)
-        cell.posterImageView.setImageWith(URL(string: poster)!)
+        
+        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
+        let urlRequest = URLRequest(
+            url: URL(string: "https://image.tmdb.org/t/p/w45\(movie.value(forKey: "poster_path") as? String ?? "")")!,
+            cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,
+            timeoutInterval: 10)
+        
+        cell.posterImageView.setImageWith( urlRequest, placeholderImage: nil, success: { (request, response, image) in
+            cell.posterImageView.image = image
+            cell.posterImageView.setImageWith(URL(string: poster)!)
+        }) { (request, response, error) in
+            self.showError(error: error.localizedDescription)
+        }
+
         cell.accessoryType = UITableViewCellAccessoryType.none
         return cell
     }
@@ -138,7 +150,17 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = moviesCollectionView.dequeueReusableCell(withReuseIdentifier: "moviePosterCell", for: indexPath) as! MoviePosterViewCell
         let movie = movies[indexPath.row]
         let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
-        cell.posterImageView.setImageWith(URL(string: poster)!)
+        let urlRequest = URLRequest(
+            url: URL(string: "https://image.tmdb.org/t/p/w45\(movie.value(forKey: "poster_path") as? String ?? "")")!,
+            cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,
+            timeoutInterval: 10)
+
+        cell.posterImageView.setImageWith( urlRequest, placeholderImage: nil, success: { (request, response, image) in
+            cell.posterImageView.image = image
+            cell.posterImageView.setImageWith(URL(string: poster)!)
+            }) { (request, response, error) in
+                self.showError(error: error.localizedDescription)
+        }
         return cell
     }
     
