@@ -21,16 +21,36 @@ class MovieDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let poster = "https://image.tmdb.org/t/p/original\(movie.value(forKey: "poster_path") as? String ?? "")"
-        
-        posterImageView.setImageWith(URL(string: poster)!)
         titleLabel.text = (movie.value(forKey: "original_title") as! String)
         overviewTextView.text = (movie.value(forKey: "overview") as! String)
+        posterImageView.alpha = 0.0
+        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
+        let urlRequest = URLRequest(
+            url: URL(string: poster)!,
+            cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,
+            timeoutInterval: 5)
+        
+        posterImageView.setImageWith( urlRequest, placeholderImage: nil, success: { (request, response, image) in
+            self.posterImageView.image = image
+            UIView.animate(withDuration: 1, animations: {
+                self.posterImageView.alpha = 1.0
+            })
+            
+        }) { (request, response, error) in
+            self.showError(error: error.localizedDescription)
+        }
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func showError(error: String) {
+        let alert = UIAlertController(title: "Error networking", message: error, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dimiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
 
