@@ -24,7 +24,7 @@ class MovieDetailViewController: UIViewController {
         titleLabel.text = (movie.value(forKey: "original_title") as! String)
         overviewTextView.text = (movie.value(forKey: "overview") as! String)
         posterImageView.alpha = 0.0
-        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
+        let poster = "https://image.tmdb.org/t/p/original\(movie.value(forKey: "poster_path") as? String ?? "")"
         let urlRequest = URLRequest(
             url: URL(string: poster)!,
             cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,

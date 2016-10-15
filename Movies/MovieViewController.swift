@@ -77,7 +77,6 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     loadingView.stopAnimating()
                     
                     if error != nil {
-                        print("KenK11 \(error?.localizedDescription)")
                         self.showError(error: (error?.localizedDescription)!)
                     }
                     
@@ -125,20 +124,21 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.titleLabel.text = (movie.value(forKey: "title") as! String)
         cell.overviewLabel.text = (movie.value(forKey: "overview") as! String)
         
-        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
+        let poster = "https://image.tmdb.org/t/p/w45\(movie.value(forKey: "poster_path") as? String ?? "")"
+        cell.posterImageView.setImageWith(URL(string: poster)!)
         let urlRequest = URLRequest(
-            url: URL(string: "https://image.tmdb.org/t/p/w45\(movie.value(forKey: "poster_path") as? String ?? "")")!,
+            url: URL(string: "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")")!,
             cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,
             timeoutInterval: 10)
         
         cell.posterImageView.setImageWith( urlRequest, placeholderImage: nil, success: { (request, response, image) in
             cell.posterImageView.image = image
-            cell.posterImageView.setImageWith(URL(string: poster)!)
+            cell.posterImageView.alpha = 0.0
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.posterImageView.alpha = 1.0
+            })
         }) { (request, response, error) in
-            self.showError(error: error.localizedDescription)
         }
-
-        cell.accessoryType = UITableViewCellAccessoryType.none
         return cell
     }
     
@@ -149,17 +149,22 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = moviesCollectionView.dequeueReusableCell(withReuseIdentifier: "moviePosterCell", for: indexPath) as! MoviePosterViewCell
         let movie = movies[indexPath.row]
-        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
+        
+        
+        let poster = "https://image.tmdb.org/t/p/w45\(movie.value(forKey: "poster_path") as? String ?? "")"
+        cell.posterImageView.setImageWith(URL(string: poster)!)
         let urlRequest = URLRequest(
-            url: URL(string: "https://image.tmdb.org/t/p/w45\(movie.value(forKey: "poster_path") as? String ?? "")")!,
+            url: URL(string: "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")")!,
             cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,
             timeoutInterval: 10)
 
         cell.posterImageView.setImageWith( urlRequest, placeholderImage: nil, success: { (request, response, image) in
             cell.posterImageView.image = image
-            cell.posterImageView.setImageWith(URL(string: poster)!)
+            cell.posterImageView.alpha = 0.0
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.posterImageView.alpha = 1.0
+            })
             }) { (request, response, error) in
-                self.showError(error: error.localizedDescription)
         }
         return cell
     }
