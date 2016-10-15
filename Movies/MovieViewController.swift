@@ -9,7 +9,7 @@
 import UIKit
 import AFNetworking
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     @IBOutlet weak var moviesTableView: UITableView!
     
@@ -25,7 +25,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Do any additional setup after loading the view.
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
-        refreshControl.addTarget(self, action: #selector(HomeViewController.refreshData), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(MovieViewController.refreshData), for: UIControlEvents.valueChanged)
         moviesTableView.insertSubview(refreshControl, at: 0)
         fetchData(page: page)
     }

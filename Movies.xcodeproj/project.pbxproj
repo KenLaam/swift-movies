@@ -13,7 +13,7 @@
 		BE0F2AE91DB0FC480000128B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE0F2AE71DB0FC480000128B /* LaunchScreen.storyboard */; };
 		BE11A9F41DB109C500C0F72F /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE11A9F31DB109C500C0F72F /* AFNetworking.framework */; };
 		BE4C9F3A1DB12650006B38D3 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4C9F391DB12650006B38D3 /* MovieDetailViewController.swift */; };
-		BECF0B971DB0FD7100328B65 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECF0B961DB0FD7100328B65 /* HomeViewController.swift */; };
+		BECF0B971DB0FD7100328B65 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECF0B961DB0FD7100328B65 /* MovieViewController.swift */; };
 		BECF0B991DB102A100328B65 /* MovieViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECF0B981DB102A100328B65 /* MovieViewCell.swift */; };
 		FC1CA1F9FDD1865C19BE1F48 /* Pods_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42E5429688BD1049ADC24A8E /* Pods_Movies.framework */; };
 /* End PBXBuildFile section */
@@ -28,7 +28,7 @@
 		BE0F2AEA1DB0FC480000128B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE11A9F31DB109C500C0F72F /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "Pods/../build/Debug-iphoneos/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
 		BE4C9F391DB12650006B38D3 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
-		BECF0B961DB0FD7100328B65 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		BECF0B961DB0FD7100328B65 /* MovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		BECF0B981DB102A100328B65 /* MovieViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewCell.swift; sourceTree = "<group>"; };
 		D21D663EDEE021E11144267B /* Pods-Movies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Movies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Movies/Pods-Movies.debug.xcconfig"; sourceTree = "<group>"; };
 		D77176DA42FBD6C92CCE07CA /* Pods-Movies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Movies.release.xcconfig"; path = "Pods/Target Support Files/Pods-Movies/Pods-Movies.release.xcconfig"; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 				BE0F2ADE1DB0FC480000128B /* AppDelegate.swift */,
 				BE0F2AE21DB0FC480000128B /* Main.storyboard */,
 				BE4C9F391DB12650006B38D3 /* MovieDetailViewController.swift */,
-				BECF0B961DB0FD7100328B65 /* HomeViewController.swift */,
+				BECF0B961DB0FD7100328B65 /* MovieViewController.swift */,
 				BECF0B981DB102A100328B65 /* MovieViewCell.swift */,
 				BE0F2AE51DB0FC480000128B /* Assets.xcassets */,
 				BE0F2AE71DB0FC480000128B /* LaunchScreen.storyboard */,
@@ -224,7 +224,7 @@
 			files = (
 				BE4C9F3A1DB12650006B38D3 /* MovieDetailViewController.swift in Sources */,
 				BE0F2ADF1DB0FC480000128B /* AppDelegate.swift in Sources */,
-				BECF0B971DB0FD7100328B65 /* HomeViewController.swift in Sources */,
+				BECF0B971DB0FD7100328B65 /* MovieViewController.swift in Sources */,
 				BECF0B991DB102A100328B65 /* MovieViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
