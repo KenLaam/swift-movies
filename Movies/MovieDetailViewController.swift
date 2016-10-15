@@ -28,7 +28,7 @@ class MovieDetailViewController: UIViewController {
         titleLabel.text = (movie.value(forKey: "original_title") as! String)
         overviewLabel.text = (movie.value(forKey: "overview") as! String)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

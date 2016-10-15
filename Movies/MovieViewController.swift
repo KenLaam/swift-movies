@@ -19,6 +19,9 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var isLoading = false
     var page = 1
     var totalPages = 1
+    let LAYOUT_LIST = 1
+    let LAYOUT_GRID = 2
+    var layoutType = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +31,8 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         moviesTableView.dataSource = self
         refreshControl.addTarget(self, action: #selector(MovieViewController.refreshData), for: UIControlEvents.valueChanged)
         moviesTableView.insertSubview(refreshControl, at: 0)
+        
+        
         fetchData(page: page)
     }
 
@@ -125,6 +130,25 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 fetchData(page: page)
             }
         }
+    }
+    
+    
+    @IBAction func changeLayout(_ sender: AnyObject) {
+        print("KenK11")
+        
+        switch layoutType {
+        case LAYOUT_LIST:
+            layoutType = LAYOUT_GRID
+            navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")
+            break
+        case LAYOUT_GRID:
+            layoutType = LAYOUT_LIST
+            navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_grid")
+            break
+        default:
+            break
+        }
+        
         
     }
     
