@@ -13,8 +13,7 @@ class MovieDetailViewController: UIViewController {
     
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var overviewLabel: UILabel!
-    
+    @IBOutlet weak var overviewTextView: UITextView!
     
     var movie: NSDictionary!
 
@@ -26,7 +25,7 @@ class MovieDetailViewController: UIViewController {
         
         posterImageView.setImageWith(URL(string: poster)!)
         titleLabel.text = (movie.value(forKey: "original_title") as! String)
-        overviewLabel.text = (movie.value(forKey: "overview") as! String)
+        overviewTextView.text = (movie.value(forKey: "overview") as! String)
     }
     
     override func didReceiveMemoryWarning() {

@@ -113,6 +113,7 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let movie = movies[indexPath.row]
         let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
         cell.titleLabel.text = (movie.value(forKey: "title") as! String)
+        cell.overviewLabel.text = (movie.value(forKey: "overview") as! String)
         cell.posterImageView.setImageWith(URL(string: poster)!)
         cell.accessoryType = UITableViewCellAccessoryType.none
         return cell
@@ -140,15 +141,19 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         case LAYOUT_LIST:
             layoutType = LAYOUT_GRID
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")
+            moviesTableView.isHidden = false
             break
         case LAYOUT_GRID:
             layoutType = LAYOUT_LIST
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_grid")
+            moviesTableView.isHidden = true
             break
         default:
             break
         }
-        
+    }
+    
+    @IBAction func searchMovie(_ sender: AnyObject) {
         
     }
     
