@@ -9,9 +9,10 @@
 import UIKit
 import AFNetworking
 
-class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,UICollectionViewDelegate, UICollectionViewDataSource ,UIScrollViewDelegate {
     
     @IBOutlet weak var moviesTableView: UITableView!
+    @IBOutlet weak var moviesCollectionView: UICollectionView!
     
     var endPoint: String!
     var refreshControl = UIRefreshControl()
@@ -27,11 +28,17 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        refreshControl.addTarget(self, action: #selector(MovieViewController.refreshData), for: UIControlEvents.valueChanged)
+        
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
-        refreshControl.addTarget(self, action: #selector(MovieViewController.refreshData), for: UIControlEvents.valueChanged)
         moviesTableView.insertSubview(refreshControl, at: 0)
         
+        moviesCollectionView.delegate = self
+        moviesCollectionView.dataSource = self
+        moviesCollectionView.isHidden = true
+        moviesCollectionView.insertSubview(refreshControl, at: 0)
         
         fetchData(page: page)
     }
@@ -48,7 +55,10 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         loadingView.startAnimating()
         loadingView.center = tableFooterView.center
         tableFooterView.addSubview(loadingView)
+        
         moviesTableView.tableFooterView = tableFooterView
+        moviesCollectionView.insertSubview(tableFooterView, at: Int(moviesCollectionView.contentSize.height))
+        
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = URL(string: "https://api.themoviedb.org/3/movie/\(endPoint!)?api_key=\(apiKey)&page=\(page)")
         if let url = url {
@@ -85,6 +95,7 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     }
                                 }
                                 self.moviesTableView.reloadData()
+                                self.moviesCollectionView.reloadData()
                             }
                         }
                     }
@@ -119,34 +130,47 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
     }
     
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = moviesCollectionView.dequeueReusableCell(withReuseIdentifier: "moviePosterCell", for: indexPath) as! MoviePosterViewCell
+        let movie = movies[indexPath.row]
+        let poster = "https://image.tmdb.org/t/p/w342\(movie.value(forKey: "poster_path") as? String ?? "")"
+        cell.posterImageView.setImageWith(URL(string: poster)!)
+        return cell
+    }
+    
+
+    
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if(!isLoading) {
             let scrollViewContentHeight = moviesTableView.contentSize.height
             let scrollOffsetThreshold = scrollViewContentHeight - moviesTableView.bounds.size.height
-            
-            // When the user has scrolled past the threshold, start requesting
-            if(scrollView.contentOffset.y > scrollOffsetThreshold && moviesTableView.isDragging && page < totalPages) {
-                isLoading = true
-                page += 1
-                fetchData(page: page)
+            if(scrollView.contentOffset.y > scrollOffsetThreshold
+                && moviesTableView.isDragging && page < totalPages) {
+                    isLoading = true
+                    page += 1
+                    fetchData(page: page)
             }
         }
     }
     
     
     @IBAction func changeLayout(_ sender: AnyObject) {
-        print("KenK11")
-        
         switch layoutType {
         case LAYOUT_LIST:
             layoutType = LAYOUT_GRID
+            moviesTableView.isHidden = true
+            moviesCollectionView.isHidden = false
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")
-            moviesTableView.isHidden = false
             break
         case LAYOUT_GRID:
             layoutType = LAYOUT_LIST
+            moviesTableView.isHidden = false
+            moviesCollectionView.isHidden = true
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_grid")
-            moviesTableView.isHidden = true
             break
         default:
             break
@@ -159,7 +183,18 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let nextVC = segue.destination as! MovieDetailViewController
-        let index = moviesTableView.indexPathForSelectedRow?.row
-        nextVC.movie = movies[index!]
+        var index = 0
+        switch layoutType {
+        case LAYOUT_LIST:
+            index = (moviesTableView.indexPathForSelectedRow?.row)!
+            break
+        case LAYOUT_GRID:
+            index = (moviesCollectionView.indexPath(for: sender as! MoviePosterViewCell)?.row)!
+            break
+        default:
+            break
+        }
+        
+        nextVC.movie = movies[index]
     }
 }
